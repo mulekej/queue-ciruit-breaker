@@ -9,5 +9,4 @@ class QueueCiruitBreakerApplication {
     static void main(String[] args) {
         SpringApplication.run(QueueCiruitBreakerApplication, args)
     }
-
 }

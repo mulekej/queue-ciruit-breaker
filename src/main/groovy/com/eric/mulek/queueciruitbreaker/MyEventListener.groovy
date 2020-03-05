@@ -1,68 +1,37 @@
 package com.eric.mulek.queueciruitbreaker
 
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.event.EventListener
-import org.springframework.jms.annotation.EnableJms
-import org.springframework.jms.annotation.JmsListener
-import org.springframework.jms.config.JmsListenerEndpointRegistry
-import org.springframework.scheduling.annotation.Async
-import org.springframework.stereotype.Component
+import groovy.util.logging.Slf4j
 import org.springframework.stereotype.Service
-import javax.annotation.PostConstruct
-import java.time.Instant
-import java.time.temporal.ChronoUnit
-import java.util.concurrent.locks.ReentrantLock
+import org.springframework.util.ErrorHandler
 
 @Service
-@EnableJms
 class MyEventListener {
 
-    @JmsListener(destination = '')
-    void listner1() {
+//    @JmsListener(destination = '')
+    void listener1() {
 
     }
 }
 
-@Component
-class BackOffStartManager {
 
-    @Autowired
-    ExponentialLockHandler lockHandler
-    @Autowired
-    ConditionChecker conditionChecker
+@Slf4j
+@Service
+class MyErrorHandler implements ErrorHandler {
 
-    @EventListener
-    void eventListener(JmsApplicationEvent event) {
-        conditionChecker.conditionIsMet(event.eventInstant) ? lockHandler.process() : lockHandler.clear()
+    @Override
+    void handleError(Throwable t) {
+        handle(t)
+    }
+
+    void handle(MyCustomException ex) {
+        log.error('special exception', ex)
+    }
+
+    void handle(Throwable t) {
+        log.debug('General exception', t)
     }
 }
 
-@Component
-class ConditionChecker {
-
-    List<Instant> eventBuffer = []
-    int maxWindowSize = 3
-    int minWindowSize = 2
-    long threshold = 3000
-
-    boolean conditionIsMet(Instant currentEventTimeStamp) {
-        addTimeStampToListAndMaintainWindowSize(currentEventTimeStamp)
-        eventBuffer.size() == minWindowSize ? isThresholdSurpassed() : false
-    }
-
-    private boolean isThresholdSurpassed() {
-        List temp = []
-        for (int i = 0; i < eventBuffer.size() - 1; i++) {
-            temp.add(ChronoUnit.MILLIS.between(eventBuffer[i + 1], eventBuffer[i]))
-        }
-        return (temp.sum() / temp.size()) < threshold
-    }
-
-    void addTimeStampToListAndMaintainWindowSize(Instant instant) {
-        eventBuffer.add(instant)
-        if (eventBuffer.size() > maxWindowSize) {
-            eventBuffer.remove(0)
-        }
-    }
+class MyCustomException extends Exception {
+    Object finalStatus
 }
-
