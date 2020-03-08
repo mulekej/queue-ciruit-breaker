@@ -30,7 +30,7 @@ public class AverageTimeBetweenErrorThreshold implements JmsCircuitBreakerThresh
         return (sum / temp.size()) < threshold;
     }
 
-    public void addTimeStampToListAndMaintainWindowSize(Instant instant) {
+    private void addTimeStampToListAndMaintainWindowSize(Instant instant) {
         eventBuffer.add(instant);
         if (eventBuffer.size() > maxWindowSize) {
             eventBuffer.remove(0);

@@ -18,9 +18,9 @@ class GeneralConfig {
         DefaultJmsListenerContainerFactoryConfigurer configurer,
         ConnectionFactory connectionFactory,
         MyErrorHandler myErrorHandler) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
-        configurer.configure(factory, connectionFactory);
-        factory.setErrorHandler(myErrorHandler);
-        return factory;
+        new DefaultJmsListenerContainerFactory().tap {
+            configurer.configure(it, connectionFactory)
+            it.setErrorHandler(myErrorHandler)
+        }
     }
 }
