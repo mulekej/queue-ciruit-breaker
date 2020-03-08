@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
+import org.springframework.util.backoff.ExponentialBackOff;
 
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -30,7 +31,7 @@ public class ExponentialBackoffConfig {
                                                   @Qualifier("ExponentialLock") ReentrantLock lock,
                                                   @Qualifier("ExponentialLock") ThreadHelper threadHelper,
                                                   JmsListenerEndpointRegistry endpointRegistry) {
-        return new ExponentialLockHandler(initialWaitPeriodInSeconds, maxWaitPeriodInSeconds, lock, threadHelper, endpointRegistry);
+        return new ExponentialLockHandler(initialWaitPeriodInSeconds, maxWaitPeriodInSeconds, new ExponentialBackOff(), lock, threadHelper, endpointRegistry);
     }
 
     @Bean

@@ -5,11 +5,12 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.jms.annotation.EnableJms
 import org.springframework.jms.config.DefaultJmsListenerContainerFactory
+import org.springframework.retry.annotation.EnableRetry
 import javax.jms.ConnectionFactory
 
 @EnableJms
-@EnableJmsBackoffStrategy
 @Configuration
+@EnableRetry
 class GeneralConfig {
 
     @Bean

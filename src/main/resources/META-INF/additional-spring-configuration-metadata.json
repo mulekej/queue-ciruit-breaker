@@ -1,0 +1,13 @@
+{
+  "properties": [
+    {
+      "name": "max.wait.period.in.seconds",
+      "type": "java.lang.String",
+      "description": "Description for max.wait.period.in.seconds."
+    },
+    {
+      "name": "initial.wait.period.in.seconds",
+      "type": "java.lang.String",
+      "description": "Description for initial.wait.period.in.seconds."
+    }
+  ] }
