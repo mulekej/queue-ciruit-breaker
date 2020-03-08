@@ -2,13 +2,11 @@ package com.eric.mulek.queueciruitbreaker
 
 import org.junit.jupiter.api.Test
 import java.time.Instant
-import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 
-
-class ConditionChecker2Spec {
+class AverageTimeBetweenErrorConditionChecker2Spec {
 
     List<Instant> eventBuffer = []
     int windowSize = 3

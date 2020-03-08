@@ -6,8 +6,12 @@ import java.time.Instant;
 
 public class JmsApplicationEvent extends ApplicationEvent {
 
-    public JmsApplicationEvent(Object source) {
-        super(source);
+    public JmsApplicationEvent(Boolean success) {
+        super(success);
+    }
+
+    public boolean isSuccessful() {
+        return (Boolean) getSource();
     }
 
     public Instant getEventInstant() {

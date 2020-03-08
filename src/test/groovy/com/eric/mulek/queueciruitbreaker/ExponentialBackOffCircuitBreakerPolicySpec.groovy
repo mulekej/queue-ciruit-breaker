@@ -1,12 +1,14 @@
 package com.eric.mulek.queueciruitbreaker
 
+import com.eric.mulek.queueciruitbreaker.circuitbreaker.ExponentialBackOffCircuitBreakerPolicy
+import com.eric.mulek.queueciruitbreaker.circuitbreaker.ThreadHelper
 import org.springframework.jms.config.JmsListenerEndpointRegistry
 import spock.lang.Specification
 import java.util.concurrent.locks.ReentrantLock
 
-class ExponentialLockHandlerSpec extends Specification {
+class ExponentialBackOffCircuitBreakerPolicySpec extends Specification {
 
-    ExponentialLockHandler systemUnderTest
+    ExponentialBackOffCircuitBreakerPolicy systemUnderTest
 
     ReentrantLock mockLock = Mock()
     ThreadHelper mockThreadHelper = Mock()
@@ -16,7 +18,7 @@ class ExponentialLockHandlerSpec extends Specification {
     int testMaxWaitPeriodInSeconds = 10000
 
     void setup() {
-        systemUnderTest = new ExponentialLockHandler(
+        systemUnderTest = new ExponentialBackOffCircuitBreakerPolicy(
             testInitialWaitPeriodInSeconds,
             testMaxWaitPeriodInSeconds,
             mockLock,

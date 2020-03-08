@@ -2,8 +2,10 @@ package com.eric.mulek.queueciruitbreaker
 
 import groovy.util.logging.Slf4j
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.context.ApplicationEventPublisher
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.core.annotation.Order
 import org.springframework.retry.RetryCallback
 import org.springframework.retry.RetryContext
 import org.springframework.retry.annotation.Backoff
@@ -46,6 +48,24 @@ class ExternalService {
 @Slf4j
 class MyFallbackListener extends RetryListenerSupport {
 
+    @Autowired
+    ApplicationEventPublisher eventPublisher
+
+    @Override
+    def <T, E extends Throwable> void close(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
+        def event = getJmsEvent(context)
+        eventPublisher.publishEvent(event)
+    }
+
+    private JmsApplicationEvent getJmsEvent(RetryContext context) {
+        //todo make more encompassing
+        if (context.hasAttribute(RetryContext.EXHAUSTED)) {
+            new JmsApplicationEvent(false)
+        } else {
+            new JmsApplicationEvent(true)
+        }
+    }
+
     @Override
     def <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
         log.warn('An Error Occurred', throwable)
@@ -56,11 +76,13 @@ class MyFallbackListener extends RetryListenerSupport {
 class RetryConfig {
 
     @Bean
+    @Order(0)
     StatisticsListener statisticsListener() {
         new StatisticsListener(new DefaultStatisticsRepository())
     }
 
     @Bean
+    @Order(1)
     MyFallbackListener myFallbackListener() {
         new MyFallbackListener()
     }

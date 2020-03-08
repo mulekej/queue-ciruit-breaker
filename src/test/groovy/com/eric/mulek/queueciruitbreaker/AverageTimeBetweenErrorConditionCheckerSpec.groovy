@@ -5,7 +5,7 @@ import java.time.Instant
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-class ConditionCheckerSpec extends Specification {
+class AverageTimeBetweenErrorConditionCheckerSpec extends Specification {
 
     List<Instant> eventBuffer = []
     int windowSize = 3
