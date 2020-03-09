@@ -33,6 +33,7 @@ class MyTestRetryService {
     @Recover
     String recovery(String val) {
         log.info('In recovery')
+        externalService.otherProcess()
         'Recovery Value'
     }
 }
@@ -43,32 +44,34 @@ class ExternalService {
     String process() {
         throw new RuntimeException('')
     }
+
+    void otherProcess() {
+
+    }
 }
 
 @Slf4j
-class MyFallbackListener extends RetryListenerSupport {
+class MyJmsCircuitBreakerListener extends RetryListenerSupport {
+
+    private static final List FAILED_ATTRIBUTES = [RetryContext.RECOVERED, RetryContext.EXHAUSTED]
 
     @Autowired
     ApplicationEventPublisher eventPublisher
 
     @Override
     def <T, E extends Throwable> void close(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
-        def event = getJmsEvent(context)
-        eventPublisher.publishEvent(event)
+        log.info('In listener Close')
+        getJmsEvent(context).tap {
+            eventPublisher.publishEvent(it)
+        }
     }
 
     private JmsApplicationEvent getJmsEvent(RetryContext context) {
-        //todo make more encompassing
-        if (context.hasAttribute(RetryContext.EXHAUSTED)) {
+        if (FAILED_ATTRIBUTES.any { context.hasAttribute(it) }) {
             new JmsApplicationEvent(false)
         } else {
             new JmsApplicationEvent(true)
         }
-    }
-
-    @Override
-    def <T, E extends Throwable> void onError(RetryContext context, RetryCallback<T, E> callback, Throwable throwable) {
-        log.warn('An Error Occurred', throwable)
     }
 }
 
@@ -83,7 +86,7 @@ class RetryConfig {
 
     @Bean
     @Order(1)
-    MyFallbackListener myFallbackListener() {
-        new MyFallbackListener()
+    MyJmsCircuitBreakerListener myFallbackListener() {
+        new MyJmsCircuitBreakerListener()
     }
 }
