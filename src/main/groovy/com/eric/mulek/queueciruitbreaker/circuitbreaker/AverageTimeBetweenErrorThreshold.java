@@ -1,23 +1,29 @@
 package com.eric.mulek.queueciruitbreaker.circuitbreaker;
 
 import com.eric.mulek.queueciruitbreaker.JmsApplicationEvent;
-import org.springframework.stereotype.Component;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
 public class AverageTimeBetweenErrorThreshold implements JmsCircuitBreakerThreshold {
 
+    private int maxWindowSize;
+    private int minWindowSize;
+    private long threshold;
     private List<Instant> eventBuffer = new ArrayList<>();
-    private int maxWindowSize = 3;
-    private int minWindowSize = 2;
-    private long threshold = 3000;
+
+    public AverageTimeBetweenErrorThreshold(int maxWindowSize, int minWindowSize, long threshold) {
+        this.maxWindowSize = maxWindowSize;
+        this.minWindowSize = minWindowSize;
+        this.threshold = threshold;
+    }
 
     public boolean thresholdIsMet(JmsApplicationEvent event) {
-        addTimeStampToListAndMaintainWindowSize(event.getEventInstant());
+        if (!event.isSuccessful()) {
+            addTimeStampToListAndMaintainWindowSize(event.getEventInstant());
+        }
         return eventBuffer.size() == minWindowSize && isThresholdSurpassed();
     }
 
