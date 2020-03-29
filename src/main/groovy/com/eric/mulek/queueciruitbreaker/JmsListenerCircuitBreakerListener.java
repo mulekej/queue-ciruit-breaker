@@ -1,15 +1,15 @@
 package com.eric.mulek.queueciruitbreaker;
 
-import com.eric.mulek.queueciruitbreaker.circuitbreaker.JmsCircuitBreakerPolicy;
-import com.eric.mulek.queueciruitbreaker.circuitbreaker.JmsCircuitBreakerThreshold;
+import com.eric.mulek.queueciruitbreaker.circuitbreaker.MessagingCircuitBreakerPolicy;
+import com.eric.mulek.queueciruitbreaker.circuitbreaker.MessagingCircuitBreakerThreshold;
 import org.springframework.context.event.EventListener;
 
 public class JmsListenerCircuitBreakerListener {
 
-    private JmsCircuitBreakerPolicy breakerPolicy;
-    private JmsCircuitBreakerThreshold breakerThreshold;
+    private MessagingCircuitBreakerPolicy breakerPolicy;
+    private MessagingCircuitBreakerThreshold breakerThreshold;
 
-    public JmsListenerCircuitBreakerListener(JmsCircuitBreakerPolicy breakerPolicy, JmsCircuitBreakerThreshold breakerThreshold) {
+    public JmsListenerCircuitBreakerListener(MessagingCircuitBreakerPolicy breakerPolicy, MessagingCircuitBreakerThreshold breakerThreshold) {
         this.breakerPolicy = breakerPolicy;
         this.breakerThreshold = breakerThreshold;
     }

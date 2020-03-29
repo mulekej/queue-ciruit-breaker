@@ -1,6 +1,6 @@
 package com.eric.mulek.queueciruitbreaker.circuitbreaker;
 
-public interface JmsCircuitBreakerPolicy {
+public interface MessagingCircuitBreakerPolicy {
 
     void process();
 

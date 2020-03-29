@@ -7,7 +7,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AverageTimeBetweenErrorThreshold implements JmsCircuitBreakerThreshold {
+public class AverageTimeBetweenErrorThreshold implements MessagingCircuitBreakerThreshold {
 
     private int maxWindowSize;
     private int minWindowSize;
@@ -24,7 +24,7 @@ public class AverageTimeBetweenErrorThreshold implements JmsCircuitBreakerThresh
         if (!event.isSuccessful()) {
             addTimeStampToListAndMaintainWindowSize(event.getEventInstant());
         }
-        return eventBuffer.size() == minWindowSize && isThresholdSurpassed();
+        return eventBuffer.size() >= minWindowSize && isThresholdSurpassed();
     }
 
     private boolean isThresholdSurpassed() {

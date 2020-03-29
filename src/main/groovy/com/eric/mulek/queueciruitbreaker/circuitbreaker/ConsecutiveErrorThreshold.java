@@ -5,7 +5,7 @@ import com.eric.mulek.queueciruitbreaker.JmsApplicationEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ConsecutiveErrorThreshold implements JmsCircuitBreakerThreshold {
+public class ConsecutiveErrorThreshold implements MessagingCircuitBreakerThreshold {
 
     private int consecutiveErrorThreshold;
     private List<JmsApplicationEvent> eventBuffer;

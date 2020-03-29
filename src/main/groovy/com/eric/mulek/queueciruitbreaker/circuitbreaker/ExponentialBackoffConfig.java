@@ -26,6 +26,19 @@ public class ExponentialBackoffConfig {
 
     @Bean
     @Qualifier("ExponentialLock")
+//    @ConditionalOnProperty(name = "", havingValue = "AverageTimeBetweenErrorThreshold")
+    AverageTimeBetweenErrorThreshold averageTimeBetweenErrorThreshold() {
+        return new AverageTimeBetweenErrorThreshold(1, 2, 3); //todo get from @value
+    }
+
+    @Bean
+    @Qualifier("ExponentialLock")
+    ConsecutiveErrorThreshold consecutiveErrorThreshold() {
+        return new ConsecutiveErrorThreshold(5);
+    }
+
+    @Bean
+    @Qualifier("ExponentialLock")
     ExponentialBackOffCircuitBreakerPolicy exponentialLockHandler(@Value("${initial.wait.period.in.seconds:10}") int initialWaitPeriodInSeconds,
                                                                   @Value("${max.wait.period.in.seconds:90}") int maxWaitPeriodInSeconds,
                                                                   @Qualifier("ExponentialLock") ReentrantLock lock,
@@ -36,8 +49,8 @@ public class ExponentialBackoffConfig {
 
     @Bean
     @Qualifier("ExponentialLock")
-    JmsListenerCircuitBreakerListener jmsListenerCircuitBreakerListener(ExponentialBackOffCircuitBreakerPolicy exponentialLockHandler,
-                                                                        AverageTimeBetweenErrorThreshold conditionChecker) {
-        return new JmsListenerCircuitBreakerListener(exponentialLockHandler, conditionChecker);
+    JmsListenerCircuitBreakerListener jmsListenerCircuitBreakerListener(MessagingCircuitBreakerPolicy exponentialLockHandler,
+                                                                        MessagingCircuitBreakerThreshold threshold) {
+        return new JmsListenerCircuitBreakerListener(exponentialLockHandler, threshold);
     }
 }
