@@ -3,7 +3,6 @@ package com.eric.mulek.queueciruitbreaker.circuitbreaker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.Lifecycle;
-import org.springframework.jms.config.JmsListenerEndpointRegistry;
 import org.springframework.scheduling.annotation.Async;
 
 import java.util.concurrent.locks.ReentrantLock;
@@ -23,7 +22,7 @@ public class ExponentialBackOffCircuitBreakerPolicy implements MessagingCircuitB
                                                   int maxWaitPeriodInSeconds,
                                                   ReentrantLock lock,
                                                   ThreadHelper threadHelper,
-                                                  JmsListenerEndpointRegistry endpointRegistry) {
+                                                  Lifecycle endpointRegistry) {
         this.initialWaitPeriodInSeconds = initialWaitPeriodInSeconds;
         this.maxWaitPeriodInSeconds = maxWaitPeriodInSeconds;
         this.lock = lock;
