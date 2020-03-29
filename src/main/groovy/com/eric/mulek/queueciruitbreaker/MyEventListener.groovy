@@ -7,6 +7,11 @@ import org.springframework.util.ErrorHandler
 @Service
 class MyEventListener {
 
+    /*
+    todo have pointcut target @JmsListener with an around that emited as
+    success when completed with without exceptions, and an error when an exception occurs
+    Also make it able to be disabled with a property to allow manual control of event emissions
+     */
 //    @JmsListener(destination = '')
     void listener1() {
 
