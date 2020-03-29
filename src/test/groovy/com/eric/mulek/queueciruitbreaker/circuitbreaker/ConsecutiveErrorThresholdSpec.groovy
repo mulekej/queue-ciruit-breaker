@@ -1,6 +1,6 @@
 package com.eric.mulek.queueciruitbreaker.circuitbreaker
 
-import com.eric.mulek.queueciruitbreaker.JmsApplicationEvent
+import com.eric.mulek.queueciruitbreaker.MessagingCircuitBreakerEvent
 import spock.lang.Specification
 
 class ConsecutiveErrorThresholdSpec extends Specification {
@@ -13,7 +13,7 @@ class ConsecutiveErrorThresholdSpec extends Specification {
 
     void "If any successful event is received, the threshold is not met"() {
         given:
-        JmsApplicationEvent mockJmsApplicationEvent = Mock()
+        MessagingCircuitBreakerEvent mockJmsApplicationEvent = Mock()
         mockJmsApplicationEvent.successful >> true
 
         expect:
@@ -22,7 +22,7 @@ class ConsecutiveErrorThresholdSpec extends Specification {
 
     void "If all events in eventBuffer are failed, threshold is met"() {
         given:
-        List<JmsApplicationEvent> mockJmsApplicationEvents = (0..1).collect { Mock(JmsApplicationEvent) }
+        List<MessagingCircuitBreakerEvent> mockJmsApplicationEvents = (0..1).collect { Mock(MessagingCircuitBreakerEvent) }
         mockJmsApplicationEvents.each {
             it.successful >> false
         }
@@ -35,7 +35,7 @@ class ConsecutiveErrorThresholdSpec extends Specification {
 
     void "eventBuffer size is maintained when more events than the window size are added"() {
         given:
-        List<JmsApplicationEvent> mockJmsApplicationEvents = (0..2).collect { Mock(JmsApplicationEvent) }
+        List<MessagingCircuitBreakerEvent> mockJmsApplicationEvents = (0..2).collect { Mock(MessagingCircuitBreakerEvent) }
         when:
         mockJmsApplicationEvents.each {
             systemUnderTest.thresholdIsMet(it)

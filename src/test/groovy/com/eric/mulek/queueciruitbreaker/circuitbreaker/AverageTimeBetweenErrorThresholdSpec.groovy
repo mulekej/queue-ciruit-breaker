@@ -1,6 +1,6 @@
 package com.eric.mulek.queueciruitbreaker.circuitbreaker
 
-import com.eric.mulek.queueciruitbreaker.JmsApplicationEvent
+import com.eric.mulek.queueciruitbreaker.MessagingCircuitBreakerEvent
 import spock.lang.Specification
 
 class AverageTimeBetweenErrorThresholdSpec extends Specification {
@@ -13,7 +13,7 @@ class AverageTimeBetweenErrorThresholdSpec extends Specification {
 
     void "successful event not added to buffer"() {
         given:
-        JmsApplicationEvent mockJmsApplicationEvent = Mock()
+        MessagingCircuitBreakerEvent mockJmsApplicationEvent = Mock()
         mockJmsApplicationEvent.successful >> true
 
         when:

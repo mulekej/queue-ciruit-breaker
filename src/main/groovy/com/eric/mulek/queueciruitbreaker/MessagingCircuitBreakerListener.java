@@ -15,7 +15,7 @@ public class MessagingCircuitBreakerListener {
     }
 
     @EventListener
-    public void eventListener(JmsApplicationEvent event) {
+    public void eventListener(MessagingCircuitBreakerEvent event) {
         if (breakerThreshold.thresholdIsMet(event)) {
             breakerPolicy.process();
         } else {

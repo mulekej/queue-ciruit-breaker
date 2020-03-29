@@ -1,6 +1,6 @@
 package com.eric.mulek.queueciruitbreaker.circuitbreaker;
 
-import com.eric.mulek.queueciruitbreaker.JmsApplicationEvent;
+import com.eric.mulek.queueciruitbreaker.MessagingCircuitBreakerEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,7 +8,7 @@ import java.util.List;
 public class ConsecutiveErrorThreshold implements MessagingCircuitBreakerThreshold {
 
     private int consecutiveErrorThreshold;
-    private List<JmsApplicationEvent> eventBuffer;
+    private List<MessagingCircuitBreakerEvent> eventBuffer;
 
     public ConsecutiveErrorThreshold(int consecutiveErrorThreshold) {
         this.consecutiveErrorThreshold = consecutiveErrorThreshold;
@@ -16,12 +16,12 @@ public class ConsecutiveErrorThreshold implements MessagingCircuitBreakerThresho
     }
 
     @Override
-    public boolean thresholdIsMet(JmsApplicationEvent event) {
+    public boolean thresholdIsMet(MessagingCircuitBreakerEvent event) {
         addEventToListAndMaintainWindowSize(event);
-        return eventBuffer.stream().noneMatch(JmsApplicationEvent::isSuccessful);
+        return eventBuffer.stream().noneMatch(MessagingCircuitBreakerEvent::isSuccessful);
     }
 
-    private void addEventToListAndMaintainWindowSize(JmsApplicationEvent event) {
+    private void addEventToListAndMaintainWindowSize(MessagingCircuitBreakerEvent event) {
         eventBuffer.add(event);
         if (eventBuffer.size() > consecutiveErrorThreshold) {
             eventBuffer.remove(0);

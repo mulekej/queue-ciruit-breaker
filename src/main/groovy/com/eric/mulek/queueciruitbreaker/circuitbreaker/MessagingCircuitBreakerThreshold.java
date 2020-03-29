@@ -1,8 +1,8 @@
 package com.eric.mulek.queueciruitbreaker.circuitbreaker;
 
-import com.eric.mulek.queueciruitbreaker.JmsApplicationEvent;
+import com.eric.mulek.queueciruitbreaker.MessagingCircuitBreakerEvent;
 
 public interface MessagingCircuitBreakerThreshold {
 
-    boolean thresholdIsMet(JmsApplicationEvent event);
+    boolean thresholdIsMet(MessagingCircuitBreakerEvent event);
 }

@@ -1,6 +1,6 @@
 package com.eric.mulek.queueciruitbreaker.circuitbreaker;
 
-import com.eric.mulek.queueciruitbreaker.JmsApplicationEvent;
+import com.eric.mulek.queueciruitbreaker.MessagingCircuitBreakerEvent;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -20,7 +20,7 @@ public class AverageTimeBetweenErrorThreshold implements MessagingCircuitBreaker
         this.threshold = threshold;
     }
 
-    public boolean thresholdIsMet(JmsApplicationEvent event) {
+    public boolean thresholdIsMet(MessagingCircuitBreakerEvent event) {
         if (!event.isSuccessful()) {
             addTimeStampToListAndMaintainWindowSize(event.getEventInstant());
         }

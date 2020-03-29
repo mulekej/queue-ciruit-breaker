@@ -66,11 +66,11 @@ class MyJmsCircuitBreakerListener extends RetryListenerSupport {
         }
     }
 
-    private JmsApplicationEvent getJmsEvent(RetryContext context) {
+    private MessagingCircuitBreakerEvent getJmsEvent(RetryContext context) {
         if (FAILED_ATTRIBUTES.any { context.hasAttribute(it) }) {
-            new JmsApplicationEvent(false)
+            new MessagingCircuitBreakerEvent(false)
         } else {
-            new JmsApplicationEvent(true)
+            new MessagingCircuitBreakerEvent(true)
         }
     }
 }

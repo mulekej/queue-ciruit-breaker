@@ -4,9 +4,9 @@ import org.springframework.context.ApplicationEvent;
 
 import java.time.Instant;
 
-public class JmsApplicationEvent extends ApplicationEvent {
+public class MessagingCircuitBreakerEvent extends ApplicationEvent {
 
-    public JmsApplicationEvent(Boolean success) {
+    public MessagingCircuitBreakerEvent(Boolean success) {
         super(success);
     }
 
